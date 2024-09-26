@@ -1,0 +1,157 @@
+---
+// SkillBar.astro
+const skills = [
+  { name: "Terraform", logo: "../../public/assets/images/skills/terraform.svg" },
+  { name: "AWS", logo: "../../public/assets/images/skills/aws.svg" },
+  { name: "Azure", logo: "../../public/assets/images/skills/azure.svg" },
+  { name: "Docker", logo: "../../public/assets/images/skills/docker.svg" },
+  { name: "Github", logo: "../../public/assets/images/skills/github.svg" },
+  { name: "Gitlab", logo: "../../public/assets/images/skills/gitlab.svg" },
+  { name: "Python", logo: "../../public/assets/images/skills/python.svg" },
+  { name: "Bash", logo: "../../public/assets/images/skills/bash.svg" },
+  { name: "CI/CD", logo: "../../public/assets/images/skills/deploy.svg" }
+  // Add more skills as needed
+];
+
+// Function to group skills into chunks of 3
+const chunkedSkills = [];
+for (let i = 0; i < skills.length; i += 3) {
+  chunkedSkills.push(skills.slice(i, i + 3));
+}
+---
+
+<style>
+  .carousel-container {
+    position: relative;
+    width: 100%;
+    background: transparent; /* Background follows the theme */
+  }
+
+  .carousel-inner {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .skill-slide {
+    display: none; /* Hide all slides initially */
+    scroll-snap-align: start;
+    min-width: 100%; /* Each slide takes full width */
+    display: flex;
+    justify-content: space-around; /* Three skills per slide */
+    gap: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background: transparent; /* Transparent background to follow theme */
+  }
+
+  .skill-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 10px 0;
+    width: 250px; /* Fixed width for each skill item */
+    padding: 20px;
+    border: 1px solid #ddd; /* Optional border */
+    border-radius: 10px;
+    background-color: var(--skill-bar-bg, rgba(255, 255, 255, 0.8)); /* Default skill bar background with slight transparency */
+    backdrop-filter: blur(10px); /* Adds a subtle blur effect for better visibility */
+  }
+
+  .skill-bar img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+  }
+
+  .skill-bar .name {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 10px;
+    color: inherit; /* Inherit the text color from the theme */
+  }
+
+  /* Indicators Styling */
+  .indicators {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .indicator {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .indicator.active {
+    background-color: #333;
+  }
+
+  /* Optional: Hide scroll bar */
+  .carousel-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-inner {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+</style>
+
+<div class="carousel-container">
+  <div class="carousel-inner">
+    {chunkedSkills.map((group, index) => (
+      <div class="skill-slide" style={index === 0 ? 'display: flex;' : ''}>
+        {group.map(skill => (
+          <div class="skill-bar">
+            <img src={skill.logo} alt={`${skill.name} logo`} />
+            <div class="name">{skill.name}</div>
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+  
+  <!-- Slide Indicators -->
+  <div class="indicators">
+    {chunkedSkills.map((_, index) => (
+      <span class="indicator {index === 0 ? 'active' : ''}"></span>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const slides = document.querySelectorAll('.skill-slide');
+    const indicators = document.querySelectorAll('.indicator');
+    let currentSlideIndex = 0;
+
+    const setActiveSlide = (index) => {
+      slides.forEach((slide, i) => {
+        (slide as HTMLElement).style.display = i === index ? 'flex' : 'none';
+        indicators[i].classList.toggle('active', i === index);
+      });
+    };
+
+    // Auto-slide functionality
+    setInterval(() => {
+      currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+      setActiveSlide(currentSlideIndex);
+    }, 5000);
+
+    // Add click event for indicators to manually change slides
+    indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => {
+        setActiveSlide(index);
+        currentSlideIndex = index; // Update current index
+      });
+    });
+  });
+</script>
+

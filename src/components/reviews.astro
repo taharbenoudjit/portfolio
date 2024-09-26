@@ -1,0 +1,132 @@
+---
+// ReviewCarousel.astro
+const reviews = [
+  { image: "../../public/assets/images/reviews/01.png" },
+  { image: "../../public/assets/images/reviews/02.png" },
+  { image: "../../public/assets/images/reviews/03.png" },
+  { image: "../../public/assets/images/reviews/04.png" },
+  { image: "../../public/assets/images/reviews/05.png" },
+  { image: "../../public/assets/images/reviews/06.png" },
+  { image: "../../public/assets/images/reviews/07.png" },
+  { image: "../../public/assets/images/reviews/08.png" },
+  // Add more review screenshots as needed
+];
+
+// Function to group reviews into chunks of 1 per slide
+const chunkedReviews = [];
+for (let i = 0; i < reviews.length; i += 1) {
+  chunkedReviews.push(reviews.slice(i, i + 1));
+}
+---
+
+<style>
+  .carousel-container {
+    position: relative;
+    width: 100%;
+    background: transparent; /* Transparent to follow theme */
+  }
+
+  .carousel-inner {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    background: transparent; /* Transparent background */
+  }
+
+  .review-slide {
+    display: none; /* Hide all slides initially */
+    scroll-snap-align: start;
+    min-width: 100%; /* Each slide takes full width */
+    display: flex;
+    justify-content: center; /* Center the review image */
+    align-items: center;
+    padding: 20px;
+    background: transparent; /* Transparent background */
+  }
+
+  .review-slide img {
+    max-width: 100%;
+    max-height: 500px; /* Adjust max height based on your design */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for effect */
+  }
+
+  /* Indicators Styling */
+  .indicators {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .indicator {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .indicator.active {
+    background-color: #333;
+  }
+
+  /* Optional: Hide scroll bar */
+  .carousel-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-inner {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+</style>
+
+<div class="carousel-container">
+  <div class="carousel-inner">
+    {chunkedReviews.map((group, index) => (
+      <div class="review-slide" style={index === 0 ? { display: 'flex' } : {}}>
+        {group.map(review => (
+          <img src={review.image} alt="Fiverr review screenshot" />
+        ))}
+      </div>
+    ))}
+  </div>
+  
+  <!-- Slide Indicators -->
+  <div class="indicators">
+    {chunkedReviews.map((_, index) => (
+      <span class="indicator {index === 0 ? 'active' : ''}"></span>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const slides = document.querySelectorAll('.review-slide');
+    const indicators = document.querySelectorAll('.indicator');
+    let currentSlideIndex = 0;
+
+    const setActiveSlide = (index) => {
+      slides.forEach((slide, i) => {
+        (slide as HTMLElement).style.display = i === index ? 'flex' : 'none';
+        indicators[i].classList.toggle('active', i === index);
+      });
+    };
+
+    // Auto-slide functionality
+    setInterval(() => {
+      currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+      setActiveSlide(currentSlideIndex);
+    }, 5000);
+
+    // Add click event for indicators to manually change slides
+    indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => {
+        setActiveSlide(index);
+        currentSlideIndex = index; // Update current index
+      });
+    });
+  });
+</script>

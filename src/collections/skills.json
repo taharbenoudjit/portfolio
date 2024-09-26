@@ -1,0 +1,38 @@
+[
+	{
+		"title": "Terraform",
+		"image": "/assets/images/projects/terraform"
+	},
+    {
+		"title": "Github",
+		"image": "/assets/images/projects/github"
+	},
+    {
+		"title": "Gitlab",
+		"image": "/assets/images/projects/gitlab"
+	},
+    {
+		"title": "AWS",
+		"image": "/assets/images/projects/aws"
+	},
+    {
+		"title": "Azure",
+		"image": "/assets/images/projects/azure"
+	},
+    {
+		"title": "Python",
+		"image": "/assets/images/projects/python"
+	},
+    {
+		"title": "DevOps",
+		"image": "/assets/images/projects/devops"
+	},
+    {
+		"title": "Pipeline",
+		"image": "/assets/images/projects/pipeline"
+	},
+    {
+		"title": "Bash",
+		"image": "/assets/images/projects/bash"
+	}
+]
